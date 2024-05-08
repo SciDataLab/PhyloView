@@ -1,0 +1,318 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: chenyan
+ * @Date: 2023-04-03 09:51:16
+ * @LastEditors: chenyan
+ * @LastEditTime: 2023-06-06 09:44:35
+-->
+<template>
+  <div class="topmenu">
+    <div class="wrap">
+      <div class="wleft" @click="goHome">
+        <el-image :src="logo"></el-image>
+        <span>PhyloView</span>
+      </div>
+      <div class="wcenter">
+        <el-menu
+          :default-active="route.meta.jumpPath"
+          class="el-menu-demo"
+          mode="horizontal"
+          text-color="#fff"
+          active-text-color="#fdae61"
+          @select="handleSelect"
+        >
+          <el-menu-item :index="item.index" v-for="item in menurouter">
+            {{ item.name }}
+          </el-menu-item>
+        </el-menu>
+      </div>
+      <div class="wright">
+        <el-image class="img1" :src="git" @click="goGit"></el-image>
+        <!-- <el-image class="img2" :src="lang"></el-image> -->
+        <el-dropdown
+          trigger="click"
+          @command="handleSetLanguage"
+          class="languages"
+        >
+          <div style="font-size: 15px">
+            <span>{{ langName }}</span>
+            <i class="el-icon-arrow-down el-icon--right" />
+          </div>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item :disabled="language === 'zh'" command="zh">
+                中文
+              </el-dropdown-item>
+              <el-dropdown-item :disabled="language === 'en'" command="en">
+                English
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <div class="accountswrap" v-if="guserinfo.username">
+          <el-dropdown>
+            <span
+              class="el-dropdown-link"
+              style="font-weight: bold; cursor: pointer"
+            >
+              {{ guserinfo.username }}
+              <el-icon class="el-icon--right">
+                <arrow-down />
+              </el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="goPersonal"
+                  >{{$t('personal.pcen')}}</el-dropdown-item
+                >
+                <el-dropdown-item @click="Logout">{{$t('common.logout')}}</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <span v-else class="login" @click="goLogin">{{$t('common.login')}}</span>
+      </div>
+    </div>
+  </div>
+</template>
+<script setup>
+import { ref, watch, computed, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import logo from "@/assets/logo2.png";
+import git from "@/assets/git.png";
+import {docUrl} from '@/utils/utils.js'
+import { userlogout } from "@/api/accounts";
+import { useUserInfo } from "@/store/userinfo.js";
+import { useStore } from "@/store";
+const guserinfo = useUserInfo();
+let activeIndex = ref("home");
+const router = useRouter();
+const route = useRoute();
+const store = useStore();
+const menurouter = computed(() => [
+  {
+    index: "docs",
+    name: `${t("common.docs")}`,
+  },
+  {
+    index: "api",
+    name: `${t("common.api")}`,
+  },
+  {
+    index: "applicationone",
+    name: `${t("common.application")}`,
+  },
+  {
+    index: "plugins",
+    name: `${t("common.plugins")}`,
+  },
+  {
+    index: "gallery",
+    name: `${t("common.gallery")}`,
+  },
+  {
+    index: "demos",
+    name: `${t("common.demos")}`,
+  },
+  {
+    index: "contact",
+    name: `${t("common.contact")}`,
+  },
+]);
+const { t, locale } = useI18n();
+const langName = ref("");
+const language = ref("en");
+const handleSelect = (key, keyPath) => {
+  activeIndex.value = key;
+  router.push({
+    path: `/${key}`,
+  });
+};
+const goHome = () => {
+  activeIndex.value = "home";
+  router.push({
+    path: "/home",
+  });
+};
+const goLogin = () => {
+  router.push({
+    path: "/accounts/login",
+  });
+};
+const Logout = () => {
+  userlogout().then((res) => {
+    if (res.code == 0) {
+      localStorage.removeItem("username");
+      localStorage.removeItem("email");
+      localStorage.removeItem("token");
+      guserinfo.$patch({
+        email: "",
+        username: "",
+      });
+      router.push({
+        path: "/accounts/login",
+      });
+    }
+  });
+};
+const goGit = () => {
+  window.open("https://github.com/zlluGitHub/phyloView");
+};
+const curpath = (path) => {
+  activeIndex.value = path.slice(1);
+};
+const goPersonal = (path) => {
+  router.push({
+    path: "/personal/data/list",
+  });
+};
+const getUserInfo = () => {
+  guserinfo.$patch({
+    email: localStorage.getItem("email"),
+    username: localStorage.getItem("username"),
+  });
+};
+watch(
+  () => route.path,
+  (val) => {
+    curpath(val);
+  }
+);
+
+activeIndex.value = computed(() => () => {
+  //计算属性传递参数
+});
+const getLangInit = () => {
+  if (
+    localStorage.getItem("lang") == undefined ||
+    localStorage.getItem("lang") == "zh"
+  ) {
+    langName.value = "中文";
+    language.value = "zh";
+  } else {
+    langName.value = "English";
+    language.value = "en";
+  }
+};
+// 切换事件：
+const handleSetLanguage = (lang) => {
+  if (lang === "zh") {
+    langName.value = "中文";
+  } else {
+    langName.value = "English";
+  }
+  locale.value = locale.value === "zh" ? "en" : "zh";
+  localStorage.setItem("lang", locale.value);
+  language.value = lang;
+
+  store.$patch((state) => {
+    state.curlang = language.value;
+    state.curlangdocs =
+      language.value === "zh"
+        ? docUrl + "doc/indexzh.html"
+        : docUrl + "doc/indexen.html";
+  });
+};
+
+onMounted(() => {
+  let path = window.location.hash.slice(1);
+  curpath(path);
+  getLangInit();
+  getUserInfo();
+});
+</script>
+<style lang="scss">
+.topmenu {
+  color: white;
+  background: linear-gradient(to right, #2f2f9f, #42f7d3);
+  position: relative;
+  z-index: 1000;
+  .wrap {
+    display: flex;
+    padding: 0 20px;
+
+    .el-menu {
+      background: none;
+      border-bottom: 0;
+
+      & > .el-menu-item {
+        &.is-active {
+          border: 0;
+        }
+      }
+    }
+    .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+      background: none !important;
+    }
+
+    .el-menu--horizontal > .el-sub-menu .el-sub-menu__title:hover {
+      background: none !important;
+    }
+
+    .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
+    .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+      background: none !important;
+    }
+
+    .wleft {
+      width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      .el-image {
+        height: 50px;
+        width:50px;
+      }
+
+      span {
+        padding-left: 10px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+      }
+    }
+
+    .wcenter {
+      flex: 1;
+    }
+
+    .wright {
+      cursor: pointer;
+      justify-content: end;
+      width: 200px;
+      display: flex;
+      align-items: center;
+
+      .img1 {
+        width: 25px;
+        padding-right: 20px;
+      }
+
+      .el-image {
+        width: 25px;
+        cursor: pointer;
+      }
+
+      .accountswrap {
+        padding-left: 20px;
+        width: 125px;
+        background: none;
+        height: 18px;
+
+        .el-dropdown-link {
+          color: #409eff;
+        }
+      }
+
+      .login {
+        padding: 0 20px;
+        cursor: pointer;
+        color: black;
+      }
+    }
+  }
+}
+</style>
