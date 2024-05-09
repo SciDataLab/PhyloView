@@ -157,7 +157,7 @@ const Logout = () => {
   });
 };
 const goGit = () => {
-  window.open("https://github.com/zlluGitHub/phyloView");
+  window.open("https://github.com/SciDataLab/PhyloView");
 };
 const curpath = (path) => {
   activeIndex.value = path.slice(1);
