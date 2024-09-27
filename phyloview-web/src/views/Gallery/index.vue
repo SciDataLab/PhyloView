@@ -188,7 +188,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 const curtype = ref("thumbnail");
 import { jhsgallery } from "@/api/gallery/index.js";
 import { jhslike } from "@/api/accounts/index.js";
@@ -197,6 +197,7 @@ import { sharetypeopts, gallerytypeopts } from "@/utils/utils";
 import { Search } from "@element-plus/icons-vue";
 import likes from "@/assets/gallery/likes.png";
 import { useI18n } from "vue-i18n";
+import domtoimage from "dom-to-image";
 const { t } = useI18n();
 const listparams = ref({
   type: "-1",
@@ -349,7 +350,7 @@ onMounted(() => {
               overflow: hidden;
               text-overflow: ellipsis;
             }
-            .show1{
+            .show1 {
               display: -webkit-box;
               -webkit-line-clamp: 1;
               -webkit-box-orient: vertical;

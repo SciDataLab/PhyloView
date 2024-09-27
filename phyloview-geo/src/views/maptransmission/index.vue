@@ -89,7 +89,7 @@ const initTransmission = (transmission) => {
   const option2 = {
     tooltip: {
       trigger: "item",
-      triggerOn:"mousemove",
+      triggerOn: "mousemove",
       formatter: function (params) {
         return (
           params.data.fromName +
@@ -171,9 +171,6 @@ const initEchart = (legendshow, series) => {
             lon = tooltip[params.seriesName][i]["value"];
           }
         }
-        // 3秒之后再请求
-        // setTimeout(()=>{
-        //   ;},3000)
         transferParent({
           lineage: params.name,
           lat: lat,

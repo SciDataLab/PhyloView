@@ -16,6 +16,8 @@
         </ul>
       </el-col>
       <el-col :span="12" class="right12">
+        <!-- <el-button @click="downloadPng('panelalldownload')">png</el-button> -->
+
         <el-select
           style="width: 350px"
           placeholder="Select demo"
@@ -221,6 +223,11 @@
                   @acmapTrans="panel2getValue"
                   :macmapMessage="macmapMessage"
                 ></macmap-config>
+                <mheatmap-config
+                  v-show="panel2curtype == '9'"
+                  @heatmapTrans="panel2getValue"
+                  :mheatmapMessage="mheatmapMessage"
+                ></mheatmap-config>
               </div>
             </el-collapse-item>
             <el-collapse-item
@@ -321,6 +328,11 @@
                   @acmapTrans="panel3getValue"
                   :macmapMessage="macmapMessage"
                 ></macmap-config>
+                <mheatmap-config
+                  v-show="panel3curtype == '9'"
+                  @heatmapTrans="panel3getValue"
+                  :mheatmapMessage="mheatmapMessage"
+                ></mheatmap-config>
               </div>
             </el-collapse-item>
             <el-collapse-item
@@ -421,6 +433,11 @@
                   @acmapTrans="panel4getValue"
                   :macmapMessage="macmapMessage"
                 ></macmap-config>
+                <mheatmap-config
+                  v-show="panel3curtype == '9'"
+                  @heatmapTrans="panel3getValue"
+                  :mheatmapMessage="mheatmapMessage"
+                ></mheatmap-config>
               </div>
             </el-collapse-item>
             <el-collapse-item
@@ -520,6 +537,11 @@
                   @acmapTrans="panel5getValue"
                   :macmapMessage="macmapMessage"
                 ></macmap-config>
+                <mheatmap-config
+                  v-show="panel3curtype == '9'"
+                  @heatmapTrans="panel3getValue"
+                  :mheatmapMessage="mheatmapMessage"
+                ></mheatmap-config>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -529,7 +551,7 @@
         <el-image :src="open" @click="openLeftConfig"></el-image>
       </div>
     </div>
-    <div class="panelwrap">
+    <div class="panelwrap" id="panelalldownload">
       <div class="panel">
         <div class="panel1">
           <div
@@ -551,28 +573,33 @@
           <div id="tree-big" v-show="panel1curtype == 'big'"></div>
         </div>
         <div class="panel2" id="panel2" v-show="panel2show">
-          <iframe
+          <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
             id="panel2frameMap"
             :src="geoUrl + plugintypevalue[panel2curtype]"
+            crossOrigin="anonymous"
+            @load="iframeLoaded"
           ></iframe>
         </div>
       </div>
       <div class="panel3" id="panel3" v-show="panel3show">
-        <iframe
+        <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           id="panel3frameMap"
           :src="geoUrl + plugintypevalue[panel3curtype]"
+          @load="iframeLoaded"
         ></iframe>
       </div>
       <div class="panel4" id="panel4" v-show="panel4show">
-        <iframe
+        <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           id="panel4frameMap"
           :src="geoUrl + plugintypevalue[panel4curtype]"
+          @load="iframeLoaded"
         ></iframe>
       </div>
       <div class="panel5" id="panel5" v-show="panel5show">
-        <iframe
+        <iframe sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           id="panel5frameMap"
           :src="geoUrl + plugintypevalue[panel5curtype]"
+          @load="iframeLoaded"
         ></iframe>
       </div>
     </div>
@@ -689,11 +716,15 @@ import MpienetworkConfig from "./components/mpienetworkconfig.vue";
 import MfreqstackConfig from "./components/mfreqstackconfig.vue";
 import MgroupbarConfig from "./components/mgroupbarconfig.vue";
 import MacmapConfig from "./components/macmapconfig.vue";
+import MheatmapConfig from "./components/mheatmapconfig.vue";
 import TreeOrdinary from "./components/treeordinary.vue";
 import TreeBig from "./components/treebig.vue";
 import { userinfo } from "@/api/accounts";
 import { useI18n } from "vue-i18n";
 import { useUserInfo } from "@/store/userinfo.js";
+import domtoimage from "dom-to-image";
+import {shotScreen} from "@/utils/mydomtoimage.js"
+import html2canvas from 'html2canvas';
 const guserinfo = useUserInfo();
 const { t } = useI18n();
 
@@ -704,6 +735,7 @@ const mpienetworkMessage = ref({});
 const mfreqstackMessage = ref({});
 const mgroupbarMessage = ref({});
 const macmapMessage = ref({});
+const mheatmapMessage = ref({});
 
 const router = useRouter();
 const route = useRoute();
@@ -721,7 +753,30 @@ const panel5curtype = ref(0);
 const dialogShareFormVisible = ref(false);
 const cwidth = ref(0);
 const cheight = ref(0);
+const iframeLoaded = () => {
+  document.querySelector('iframe').setAttribute('document.domain', ''); 
+}
 // 重置treeid mapid maptype
+const downloadPng = (selector) => {
+  nextTick(async () => {
+    const node = document.querySelector("#" + selector); // 获取DOM元素的引用
+    const canvas = document.createElement('canvas')
+        canvas.width = node.offsetWidth
+        canvas.height = node.offsetHeight;
+      domtoimage
+      .toPng(document.querySelector("#panel2frameMap").contentWindow.document.body,{ bgcolor: 'white' })
+      .then((dataUrl) => {
+        var link = document.createElement('a');
+        link.download = 'my-image-name.png';
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  // shotScreen()
+};
 const resetparams = reactive({
   treeid: null,
   treetype: null,
@@ -737,6 +792,7 @@ const pluginurl = {
   6: webUrl + "jhs/download/1935",
   7: webUrl + "jhs/download/1937",
   8: webUrl + "jhs/download/0",
+  9: webUrl + "jhs/download/3281",
 };
 const shareform = reactive({
   img: "",
@@ -1014,6 +1070,7 @@ const initPage = () => {
 };
 // 重置按钮
 const resetPage = () => {
+  curids.value = []
   panel1curtype.value = resetparams.treetype ?? panel1curtype.value;
   initresetTree();
   resetMap();
@@ -1071,7 +1128,6 @@ const initMap = () => {
   }
 };
 const resetMap = () => {
-  console.log(resetparams,'resetparams.resetparams.')
   panel2valueid.value = resetparams.mapid.p2 ?? panel2valueid.value;
   panel2curtype.value = resetparams.maptype.p2 ?? panel2curtype.value;
   panel3valueid.value = resetparams.mapid.p3 ?? panel3valueid.value;
@@ -1273,6 +1329,8 @@ const drawPage = async (params, panel) => {
               getMgroupbarTrans(res.content);
             } else if (panel2curtype.value == 7) {
               getMacmapTrans(res.content);
+            } else if (panel2curtype.value == 9) {
+              getHeatmapTrans(res.content)
             }
           } else if (panel == 3) {
             setTimeout(() => {
@@ -1292,6 +1350,8 @@ const drawPage = async (params, panel) => {
               getMgroupbarTrans(res.content);
             } else if (panel3curtype.value == 7) {
               getMacmapTrans(res.content);
+            } else if (panel3curtype.value == 9) {
+              getHeatmapTrans(res.content)
             }
           } else if (panel == 4) {
             setTimeout(() => {
@@ -1311,6 +1371,8 @@ const drawPage = async (params, panel) => {
               getMgroupbarTrans(res.content);
             } else if (panel4curtype.value == 7) {
               getMacmapTrans(res.content);
+            } else if (panel4curtype.value == 9) {
+              getHeatmapTrans(res.content)
             }
           } else if (panel == 5) {
             setTimeout(() => {
@@ -1330,6 +1392,8 @@ const drawPage = async (params, panel) => {
               getMgroupbarTrans(res.content);
             } else if (panel5curtype.value == 7) {
               getMacmapTrans(res.content);
+            } else if (panel5curtype.value == 9) {
+              getHeatmapTrans(res.content)
             }
           }
         }
@@ -1349,6 +1413,7 @@ let panel_params = [
   mfreqstackMessage.value,
   mgroupbarMessage.value,
   macmapMessage.value,
+  mheatmapMessage.value
 ];
 
 const getMapcolorTrans = (res) => {
@@ -1412,6 +1477,21 @@ const getMacmapTrans = (res) => {
     maptype: macmapMessage.value.maptype,
   };
 };
+const getHeatmapTrans = (res) => {
+  mheatmapMessage.value = res;
+  panel_params[8] = {
+    legend: mheatmapMessage.value.legend,
+    rowname: mheatmapMessage.value.rowname,
+    colname: mheatmapMessage.value.colname,
+    showtext: mheatmapMessage.value.showtext,
+    map_type: mheatmapMessage.value.map_type,
+    color: mheatmapMessage.value.color,
+    fontsize: mheatmapMessage.value.fontsize,
+    bggrid: mheatmapMessage.value.bggrid,
+    max: mheatmapMessage.value.max,
+    min: mheatmapMessage.value.min,
+  };
+}
 //   插件配置文件
 //   ---结束
 const panel2clearUpload = () => {
@@ -1630,6 +1710,18 @@ const getmapdensity = (tdata) => {
     }
   });
 };
+// 2.4 mheatmap
+const getmheatmap = (tdata) => {
+  // 得到热力图部分的结点信息，并在树部分标红
+  highlight_tree(tdata.names)
+}
+// 3.1 标红树状图
+const highlight_tree = (names) =>{
+  nextTick(()=>{
+    treeOridinaryConfig.highlight.leafs = names
+    getInitOrdinaryTree()
+  })
+}
 // 3.根据树的结点，裁切该树
 const prune_tree = (names) => {
   if (panel1curtype.value == "ordinary") {
@@ -2051,6 +2143,8 @@ const getShareMapConfig = () => {
             mgroupbarMessage.value = panel2_cfg;
           } else if (panel2curtype.value == 7) {
             macmapMessage.value = panel2_cfg;
+          } else if(panel2curtype.value == 9){
+            mheatmapMessage.value = panel2_cfg;
           }
         } else if (i == "panel3_cfg") {
           let panel3_cfg = res.cfg["panel3_cfg"];
@@ -2068,6 +2162,8 @@ const getShareMapConfig = () => {
             mgroupbarMessage.value = panel3_cfg;
           } else if (panel3curtype.value == 7) {
             macmapMessage.value = panel3_cfg;
+          } else if(panel3curtype.value == 9){
+            mheatmapMessage.value = panel3_cfg;
           }
         } else if (i == "panel4_cfg") {
           let panel4_cfg = res.cfg["panel4_cfg"];
@@ -2085,6 +2181,8 @@ const getShareMapConfig = () => {
             mgroupbarMessage.value = panel4_cfg;
           } else if (panel4curtype.value == 7) {
             macmapMessage.value = panel4_cfg;
+          } else if(panel4curtype.value == 9){
+            mheatmapMessage.value = panel4_cfg;
           }
         } else if (i == "panel5_cfg") {
           let panel5_cfg = res.cfg["panel5_cfg"];
@@ -2102,6 +2200,8 @@ const getShareMapConfig = () => {
             mgroupbarMessage.value = panel5_cfg;
           } else if (panel5curtype.value == 7) {
             macmapMessage.value = panel5_cfg;
+          } else if(panel5curtype.value == 9){
+            mheatmapMessage.value = panel5_cfg;
           }
         }
       }
@@ -2231,12 +2331,11 @@ const handleMessageIndex = (event) => {
     getmaptransmissionnodes(event.data.tparams);
   } else if (event.data.type == "3") {
     getmapdensity(event.data.tparams);
+  } else if (event.data.type == "9") {
+    getmheatmap(event.data.tparams)
   }
-};
-// 1.监听地图点击事件，获取地图code
-const watchMap = () => {
-  window.addEventListener("message", handleMessageIndex, false);
-};
+}
+
 onMounted(() => {
   oIframe2 = document.getElementById("panel2frameMap");
   oIframe3 = document.getElementById("panel3frameMap");
@@ -2302,7 +2401,10 @@ onMounted(() => {
   //map传过来的id
   watchMap();
 });
-
+// 1.监听地图点击事件，获取地图code
+const watchMap = () => {
+  window.addEventListener("message", handleMessageIndex, false);
+};
 onBeforeUnmount(() => {
   window.removeEventListener("message", handleMessageIndex, false);
 });
@@ -2500,12 +2602,12 @@ onBeforeUnmount(() => {
         #tree-ordinary,
         #tree-big {
           height: 540px;
-          overflow-y: scroll;
+          overflow-y: hidden;
           box-sizing: border-box;
         }
       }
       .panel2 {
-        border-left: thin solid rgb(187, 187, 187);
+        // border-left: thin solid rgb(187, 187, 187);
         #panel2frameMap {
           height: 540px;
         }
@@ -2517,7 +2619,7 @@ onBeforeUnmount(() => {
       width: 100%;
       height: calc(50vh - 130px);
       min-height: 500px;
-      border-top: thin solid rgb(187, 187, 187);
+      // border-top: thin solid rgb(187, 187, 187);
     }
     iframe {
       width: 100%;

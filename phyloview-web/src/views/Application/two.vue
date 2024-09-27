@@ -3,12 +3,8 @@
     <el-row>
       <el-col :span="12">
         <ul>
-          <li
-            v-for="item in panelli"
-            :key="item.num"
-            @click="curPanel(item.num)"
-            :class="{ active: curpanelnum == item.num }"
-          >
+          <li v-for="item in panelli" :key="item.num" @click="curPanel(item.num)"
+            :class="{ active: curpanelnum == item.num }">
             <el-button class="btn" :disabled="curpanelnum == item.num">
               <el-image :src="item.name"></el-image>
             </el-button>
@@ -16,20 +12,11 @@
         </ul>
       </el-col>
       <el-col :span="12" class="right12">
-        <el-select
-          style="width: 350px"
-          placeholder="Select demo"
-          v-model="selectdemo2"
-          @change="changeDemo"
-          clearable
-        >
-          <el-option
-            v-for="item in selectdemoopt2"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+        <el-select style="width: 350px" placeholder="Select demo" v-model="selectdemo2" @change="changeDemo" clearable>
+          <el-option v-for="item in selectdemoopt2" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <div class="resetbtn">
+          <!-- <el-button @click="takeSnapshot('oIframe2')">Take Snapshot</el-button> -->
           <el-tooltip content="reset" placement="top" effect="light">
             <el-button type="warning" @click="resetPage">
               {{ $t("application.reset") }}
@@ -37,18 +24,10 @@
           </el-tooltip>
         </div>
         <div class="sharebtn">
-          <el-button
-            v-if="guserinfo.username"
-            color="#42bec3"
-            @click="openShare"
-            >{{ $t("application.share") }}</el-button
-          >
-          <el-tooltip
-            v-else
-            :content="$t('application.sharetip')"
-            placement="top"
-            effect="light"
-          >
+
+          <el-button v-if="guserinfo.username" color="#42bec3" @click="openShare">{{ $t("application.share")
+            }}</el-button>
+          <el-tooltip v-else :content="$t('application.sharetip')" placement="top" effect="light">
             <el-button color="#42bec3" @click="openShare" :disabled="true">{{
               $t("application.share")
             }}</el-button>
@@ -67,48 +46,31 @@
             <span>{{ $t("application.treetitle") }}</span>
           </div>
           <div class="treeindexwrap">
-            <el-tabs
-              type="border-card"
-              @tab-change="tabTreeChange"
-              v-model="panel1curtype"
-            >
+            <el-tabs type="border-card" @tab-change="tabTreeChange" v-model="panel1curtype">
               <el-tab-pane name="ordinary">
                 <template #label>
                   <span class="custom-tabs-label">
-                    <el-tooltip
-                      content="*Recommend for nodes < 10,000"
-                      placement="top"
-                      effect="dark"
-                    >
+                    <el-tooltip content="*Recommend for nodes < 10,000" placement="top" effect="dark">
                       <el-button link>
                         {{ $t("application.basictree") }}
                       </el-button>
                     </el-tooltip>
                   </span>
                 </template>
-                <tree-ordinary
-                  @treeOrdinaryConfigTrans="panel1getOrdinaryConfig"
-                  :treeordinaryMessage="treeordinaryMessage"
-                ></tree-ordinary>
+                <tree-ordinary @treeOrdinaryConfigTrans="panel1getOrdinaryConfig"
+                  :treeordinaryMessage="treeordinaryMessage"></tree-ordinary>
               </el-tab-pane>
               <el-tab-pane name="big">
                 <template #label>
                   <span class="custom-tabs-label">
-                    <el-tooltip
-                      content="*Recommend for nodes > 10,000"
-                      placement="top"
-                      effect="dark"
-                    >
+                    <el-tooltip content="*Recommend for nodes > 10,000" placement="top" effect="dark">
                       <el-button link>
                         {{ $t("application.bigtree") }}
                       </el-button>
                     </el-tooltip>
                   </span>
                 </template>
-                <tree-big
-                  @treeBigConfigTrans="panel1getBigConfig"
-                  :treebigMessage="treebigMessage"
-                ></tree-big>
+                <tree-big @treeBigConfigTrans="panel1getBigConfig" :treebigMessage="treebigMessage"></tree-big>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -119,23 +81,15 @@
             {{ $t("application.maptitle") }}
           </div>
           <el-collapse v-model="activeNames12" accordion>
-            <el-collapse-item
-              :title="$t('application.panel2con')"
-              name="22"
-              v-show="panel2show"
-            >
+            <el-collapse-item :title="$t('application.panel2con')" name="22" v-show="panel2show">
               <el-row class="line">
                 <el-col :span="12">
                   <label>{{ $t("application.pluginsel") }}</label>
                 </el-col>
                 <el-col :span="12">
                   <el-select v-model="panel2curtype" @click="panel2clearUpload">
-                    <el-option
-                      v-for="item in apptypeopts"
-                      :label="item.label"
-                      :value="item.value"
-                      :disabled="item.value == 0"
-                    ></el-option>
+                    <el-option v-for="item in apptypeopts" :label="item.label" :value="item.value"
+                      :disabled="item.value == 0"></el-option>
                   </el-select>
                 </el-col>
               </el-row>
@@ -145,16 +99,9 @@
                     <label>{{ $t("application.mapfileupload") }}</label>
                   </el-col>
                   <el-col :span="12">
-                    <el-upload
-                      ref="mapupload"
-                      class="upload-demo"
-                      accept=".csv,.tsv,.zip"
-                      :max-size="maxFileSize"
-                      :limit="1"
-                      :on-exceed="handlePanel2MapExceed"
-                      :on-change="handlePanel2MapChange"
-                      :auto-upload="false"
-                    >
+                    <el-upload ref="mapupload" class="upload-demo" accept=".csv,.tsv,.zip" :max-size="maxFileSize"
+                      :limit="1" :on-exceed="handlePanel2MapExceed" :on-change="handlePanel2MapChange"
+                      :auto-upload="false">
                       <el-button size="small" color="#42bec3">
                         {{ $t("application.mapbtn") }}
                       </el-button>
@@ -163,58 +110,36 @@
                 </el-row>
                 <el-row>
                   <el-col :span="12" style="text-indent: 2em">{{
-                    $t("application.downloadtemplate")
-                  }}</el-col>
+                  $t("application.downloadtemplate")
+                }}</el-col>
                   <el-col :span="12">
                     <a :href="pluginurl[panel2curtype]">
-                      <el-button
-                        size="small"
-                        color="#42bec3"
-                        :icon="Download"
-                      />
+                      <el-button size="small" color="#42bec3" :icon="Download" />
                     </a>
                   </el-col>
                 </el-row>
               </div>
 
               <div class="pluginconfig">
-                <mapcolor-config
-                  v-show="panel2curtype == '1'"
-                  @colorTrans="panel2getValue"
-                  :mapcolorMessage="mapcolorMessage"
-                ></mapcolor-config>
-                <maptransmission-config
-                  v-show="panel2curtype == '2'"
-                  @transmissionTrans="panel2getValue"
-                  :maptransmissionMessage="maptransmissionMessage"
-                >
+                <mapcolor-config v-show="panel2curtype == '1'" @colorTrans="panel2getValue"
+                  :mapcolorMessage="mapcolorMessage"></mapcolor-config>
+                <maptransmission-config v-show="panel2curtype == '2'" @transmissionTrans="panel2getValue"
+                  :maptransmissionMessage="maptransmissionMessage">
                 </maptransmission-config>
-                <mapdensity-config
-                  v-show="panel2curtype == '3'"
-                  @densityTrans="panel2getValue"
-                  :mapdensityMessage="mapdensityMessage"
-                >
+                <mapdensity-config v-show="panel2curtype == '3'" @densityTrans="panel2getValue"
+                  :mapdensityMessage="mapdensityMessage">
                 </mapdensity-config>
-                <mpienetwork-config
-                  v-show="panel2curtype == '4'"
-                  @pienetworkTrans="panel2getValue"
-                  :mpienetworkMessage="mpienetworkMessage"
-                ></mpienetwork-config>
-                <mfreqstack-config
-                  v-show="panel2curtype == '5'"
-                  @freqstackTrans="panel2getValue"
-                  :mfreqstackMessage="mfreqstackMessage"
-                ></mfreqstack-config>
-                <mgroupbar-config
-                  v-show="panel2curtype == '6'"
-                  @groupbarTrans="panel2getValue"
-                  :mgroupbarMessage="mgroupbarMessage"
-                ></mgroupbar-config>
-                <macmap-config
-                  v-show="panel2curtype == '7'"
-                  @acmapTrans="panel2getValue"
-                  :macmapMessage="macmapMessage"
-                ></macmap-config>
+                <mpienetwork-config v-show="panel2curtype == '4'" @pienetworkTrans="panel2getValue"
+                  :mpienetworkMessage="mpienetworkMessage"></mpienetwork-config>
+                <mfreqstack-config v-show="panel2curtype == '5'" @freqstackTrans="panel2getValue"
+                  :mfreqstackMessage="mfreqstackMessage"></mfreqstack-config>
+                <mgroupbar-config v-show="panel2curtype == '6'" @groupbarTrans="panel2getValue"
+                  :mgroupbarMessage="mgroupbarMessage"></mgroupbar-config>
+                <macmap-config v-show="panel2curtype == '7'" @acmapTrans="panel2getValue"
+                  :macmapMessage="macmapMessage"></macmap-config>
+
+                <mheatmap-config v-show="panel2curtype == '9'" @heatmapTrans="panel2getValue"
+                  :mheatmapMessage="mheatmapMessage"></mheatmap-config>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -224,20 +149,14 @@
         <el-image :src="open" @click="openLeftConfig"></el-image>
       </div>
     </div>
-    <div class="panelwrap">
+    <div class="panelwrap" id="panel2download">
       <div class="panel">
         <div class="panel1">
-          <div
-            class="tips"
-            v-if="panel1curtype == 'ordinary' && !treeOridinaryConfig.content"
-          >
+          <div class="tips" v-if="panel1curtype == 'ordinary' && !treeOridinaryConfig.content">
             <el-image class="panel1tree" :src="tree"></el-image>
             <p>{{ $t("application.uploadtreedatashow") }}</p>
           </div>
-          <div
-            class="tips"
-            v-else-if="panel1curtype == 'big' && !treeBigConfig.source"
-          >
+          <div class="tips" v-else-if="panel1curtype == 'big' && !treeBigConfig.source">
             <el-image class="panel1tree" :src="tree"></el-image>
             <p>{{ $t("application.uploadtreedatashow") }}</p>
           </div>
@@ -245,79 +164,36 @@
           <div id="tree-big" v-show="panel1curtype == 'big'"></div>
         </div>
         <div class="panel2" v-show="panel2show" ref="panel2">
-          <iframe
-            class="oIframe2"
-            frameborder="no"
-            ref="oIframe2"
-            :src="geoUrl + plugintypevalue[panel2curtype]"
-          ></iframe>
+          <iframe id="oIframe2" class="oIframe2" frameborder="no" ref="oIframe2"
+            :src="geoUrl + plugintypevalue[panel2curtype]"></iframe>
         </div>
       </div>
     </div>
     <!-- 共享 -->
-    <el-dialog
-      v-model="dialogShareFormVisible"
-      :title="$t('application.share')"
-    >
+    <el-dialog v-model="dialogShareFormVisible" :title="$t('application.share')">
       <el-form ref="shareformRef" :model="shareform" :rules="sharerules">
-        <el-form-item
-          :label="$t('application.imgs')"
-          :label-width="formLabelWidth"
-          prop="img"
-        >
-          <el-upload
-            class="upload-demo"
-            action=""
-            :on-change="sharehandleChange"
-            accept=".png,.jpg"
-            :limit="1"
-            :auto-upload="false"
-          >
-            <el-button color="#42bec3" style="color: white"
-              >Click to upload</el-button
-            >
+        <el-form-item :label="$t('application.imgs')" :label-width="formLabelWidth" prop="img">
+          <el-upload class="upload-demo" action="" :on-change="sharehandleChange" accept=".png,.jpg" :limit="1"
+            :auto-upload="false">
+            <el-button color="#42bec3" style="color: white">Click to upload</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item
-          :label="$t('application.title')"
-          :label-width="formLabelWidth"
-          prop="title"
-        >
+        <el-form-item :label="$t('application.title')" :label-width="formLabelWidth" prop="title">
           <el-input v-model="shareform.title" autocomplete="off" />
         </el-form-item>
-        <el-form-item
-          :label="$t('application.abs')"
-          :label-width="formLabelWidth"
-          prop="des"
-        >
+        <el-form-item :label="$t('application.abs')" :label-width="formLabelWidth" prop="des">
           <el-input v-model="shareform.des" autocomplete="off" />
         </el-form-item>
-        <el-form-item
-          :label="$t('application.type')"
-          :label-width="formLabelWidth"
-          prop="type"
-        >
-          <el-select
-            v-model="shareform.type"
-            multiple
-            placeholder="Please select a type"
-          >
-            <el-option
-              v-for="item in sharetypeopts"
-              :label="item.label"
-              :value="item.value"
-            />
+        <el-form-item :label="$t('application.type')" :label-width="formLabelWidth" prop="type">
+          <el-select v-model="shareform.type" multiple placeholder="Please select a type">
+            <el-option v-for="item in sharetypeopts" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogShareFormVisible = false">Cancel</el-button>
-          <el-button
-            color="#42bec3"
-            style="color: white"
-            @click="saveShare(shareformRef)"
-          >
+          <el-button color="#42bec3" style="color: white" @click="saveShare(shareformRef)">
             Confirm
           </el-button>
         </span>
@@ -344,6 +220,7 @@ import treeicon from "@/assets/application/treeicon.png";
 import open from "@/assets/application/open.png";
 import close from "@/assets/application/close.png";
 import tree from "@/assets/application/tree.png";
+import html2canvas from 'html2canvas';
 import {
   maxFileSize,
   webUrl,
@@ -366,13 +243,17 @@ import MpienetworkConfig from "./components/mpienetworkconfig.vue";
 import MfreqstackConfig from "./components/mfreqstackconfig.vue";
 import MgroupbarConfig from "./components/mgroupbarconfig.vue";
 import MacmapConfig from "./components/macmapconfig.vue";
+import MheatmapConfig from "./components/mheatmapconfig.vue";
+
 import TreeOrdinary from "./components/treeordinary.vue";
 import TreeBig from "./components/treebig.vue";
 import { userinfo } from "@/api/accounts";
 import { useI18n } from "vue-i18n";
 import { useUserInfo } from "@/store/userinfo.js";
+import domtoimage from "dom-to-image";
 const guserinfo = useUserInfo();
 const { t } = useI18n();
+const panel2download = ref(null);
 const mapcolorMessage = ref({});
 const maptransmissionMessage = ref({});
 const mapdensityMessage = ref({});
@@ -380,6 +261,8 @@ const mpienetworkMessage = ref({});
 const mfreqstackMessage = ref({});
 const mgroupbarMessage = ref({});
 const macmapMessage = ref({});
+const mheatmapMessage = ref({});
+
 const router = useRouter();
 const route = useRoute();
 const curpanelnum = ref(2);
@@ -404,6 +287,7 @@ const pluginurl = {
   6: webUrl + "jhs/download/1935",
   7: webUrl + "jhs/download/1937",
   8: webUrl + "jhs/download/0",
+  9: webUrl + "jhs/download/3281",
 };
 const shareform = reactive({
   img: "",
@@ -543,7 +427,6 @@ const getInitOrdinaryTree = () => {
       );
     }
     treeORDINARY.onClick = (data) => {
-      console.log(data,'data')
       treeOridinaryConfig.highlight.leafs = [];
       // if (data.type == "link") {
       //   treeOrdinaryNodes.value = collectChildrenNames(data.data.target.data);
@@ -562,7 +445,7 @@ const getInitOrdinaryTree = () => {
         } else if (treeOridinaryConfig.layout == "radial") {
           treeOrdinaryNodes.value = collectChildrenNames(data.data.target.data);
         }
-      }else{
+      } else {
         treeOrdinaryNodes.value = collectChildrenNames(data.data.target.data);
       }
       if (treeOrdinaryNodes.value) {
@@ -582,6 +465,7 @@ const initPage = () => {
 };
 // 重置
 const resetPage = () => {
+  curids.value = []
   panel1curtype.value = resetparams.treetype ?? panel1curtype.value;
   initresetTree();
   resetMap();
@@ -605,31 +489,33 @@ const initresetTree = () => {
   }
 };
 const setTree = (params) => {
-  jhscentent(params).then((res) => {
-    if (res.code == "0") {
-      // closeLoading();
-      if (panel1curtype.value == "big") {
-        treeBigConfig.source = res.content;
-        getInitBigTree();
-        if (shareid.value || selectdemo2.value) {
-          getTreeBigTrans();
+  jhscentent(params)
+    .then((res) => {
+      if (res.code == "0") {
+        // closeLoading();
+        if (panel1curtype.value == "big") {
+          treeBigConfig.source = res.content;
+          getInitBigTree();
+          if (shareid.value || selectdemo2.value) {
+            getTreeBigTrans();
+          }
+        } else if (panel1curtype.value == "ordinary") {
+          treeOridinaryConfig.content = res.content;
+          getInitOrdinaryTree();
+          if (shareid.value || selectdemo2.value) {
+            getTreeOrdinaryTrans();
+          }
         }
-      } else if (panel1curtype.value == "ordinary") {
-        treeOridinaryConfig.content = res.content;
-        getInitOrdinaryTree();
-        if (shareid.value || selectdemo2.value) {
-          getTreeOrdinaryTrans();
-        }
+      } else {
+        closeLoading();
       }
-    }else{
+    })
+    .catch((error) => {
       closeLoading();
-    }
-  }).catch(error=>{
-    closeLoading()
-  });
+    });
 };
 const initMap = () => {
-  openLoading()
+  openLoading();
   drawPage(
     {
       ids:
@@ -732,6 +618,8 @@ const drawPage = async (params, panel) => {
               getMgroupbarTrans(res.content);
             } else if (panel2curtype.value == 7) {
               getMacmapTrans(res.content);
+            } else if (panel2curtype.value == 9) {
+              getHeatmapTrans(res.content);
             }
           }
         }
@@ -750,6 +638,7 @@ let panel_params = [
   mfreqstackMessage.value,
   mgroupbarMessage.value,
   macmapMessage.value,
+  mheatmapMessage.value
 ];
 const getMapcolorTrans = (res) => {
   mapcolorMessage.value = res;
@@ -812,6 +701,21 @@ const getMacmapTrans = (res) => {
     maptype: macmapMessage.value.maptype,
   };
 };
+const getHeatmapTrans = (res) => {
+  mheatmapMessage.value = res;
+  panel_params[8] = {
+    legend: mheatmapMessage.value.legend,
+    rowname: mheatmapMessage.value.rowname,
+    colname: mheatmapMessage.value.colname,
+    showtext: mheatmapMessage.value.showtext,
+    map_type: mheatmapMessage.value.map_type,
+    color: mheatmapMessage.value.color,
+    fontsize:mheatmapMessage.value.fontsize,
+    bggrid: mheatmapMessage.value.bggrid,
+    max: mheatmapMessage.value.max,
+    min: mheatmapMessage.value.min,
+  };
+}
 const panel2clearUpload = () => {
   mapupload.value.clearFiles();
 };
@@ -837,6 +741,8 @@ const handleMessageTwo = (event) => {
     getmaptransmissionnodes(event.data.tparams);
   } else if (event.data.type == "3") {
     getmapdensity(event.data.tparams);
+  } else if (event.data.type == "9") {
+    getmheatmap(event.data.tparams)
   }
 };
 // 2.1mapcolor      根据城市code，得到树的结点
@@ -906,6 +812,20 @@ const getmapdensity = (tdata) => {
     }
   });
 };
+// 2.4 mheatmap
+const getmheatmap = (tdata) => {
+  // 得到热力图部分的结点信息，并在树部分标红
+  highlight_tree(tdata.names)
+
+}
+// 3.1 标红树状图
+const highlight_tree = (names) => {
+  nextTick(() => {
+    treeOridinaryConfig.highlight.leafs = names
+    getInitOrdinaryTree()
+  })
+}
+
 // 3.根据树的结点，裁切该树
 const prune_tree = (names) => {
   if (panel1curtype.value == "ordinary") {
@@ -1126,7 +1046,6 @@ const panel1getOrdinaryConfig = (data) => {
   for (const key in data) {
     treeOridinaryConfig[key] = data[key];
   }
-  console.log(treeOridinaryConfig, "treeOridinaryConfig");
   getInitOrdinaryTree();
 };
 let panel2config = ref({});
@@ -1187,6 +1106,8 @@ const getShareMapConfig = () => {
         mgroupbarMessage.value = panel2_cfg;
       } else if (panel2curtype.value == 7) {
         macmapMessage.value = panel2_cfg;
+      } else if (panel2curtype.value == 9) {
+        mheatmapMessage.value = panel2_cfg;
       }
     }
   });
@@ -1202,12 +1123,6 @@ const showselectdemo2 = () => {
   panel2config.value = {};
   if (selectdemo2.value == "tdemo1") {
     params = {
-      // id: 57,
-      // panelnum: 2,
-      // treeid: 2016,
-      // tree_type: "ordinary",
-      // mapid: { panel2valueid: 2015 },
-      // map_type: { panel2curtype: 1 },
       id: 149,
       panelnum: 2,
       treeid: 2766,
@@ -1218,12 +1133,6 @@ const showselectdemo2 = () => {
     selectdemo2Int(params);
   } else if (selectdemo2.value == "tdemo2") {
     params = {
-      // id: 41,
-      // panelnum: 2,
-      // treeid: 1755,
-      // tree_type: "ordinary",
-      // mapid: { panel2valueid: 1756 },
-      // map_type: { panel2curtype: 2 },
       id: 198,
       panelnum: 2,
       treeid: 2987,
@@ -1234,12 +1143,6 @@ const showselectdemo2 = () => {
     selectdemo2Int(params);
   } else if (selectdemo2.value == "tdemo3") {
     params = {
-      // id: 44,
-      // panelnum: 2,
-      // treeid: 1766,
-      // tree_type: "ordinary",
-      // mapid: { panel2valueid: 1767 },
-      // map_type: { panel2curtype: 3 },
       id: 261,
       panelnum: 2,
       treeid: 3234,
@@ -1250,12 +1153,6 @@ const showselectdemo2 = () => {
     selectdemo2Int(params);
   } else if (selectdemo2.value == "tdemo4") {
     params = {
-      // id: 42,
-      // panelnum: 2,
-      // treeid: 1759,
-      // tree_type: "ordinary",
-      // mapid: { panel2valueid: 1760 },
-      // map_type: { panel2curtype: 4 },
       id: 263,
       panelnum: 2,
       treeid: 3243,
@@ -1266,12 +1163,6 @@ const showselectdemo2 = () => {
     selectdemo2Int(params);
   } else if (selectdemo2.value == "tdemo5") {
     params = {
-      // id: 46,
-      // panelnum: 2,
-      // treeid: 1773,
-      // tree_type: "ordinary",
-      // mapid: { panel2valueid: 1774 },
-      // map_type: { panel2curtype: 5 },
       id: 260,
       panelnum: 2,
       treeid: 3227,
@@ -1282,12 +1173,6 @@ const showselectdemo2 = () => {
     selectdemo2Int(params);
   } else if (selectdemo2.value == "tdemo6") {
     params = {
-      // id: 47,
-      // panelnum: 2,
-      // treeid: 1780,
-      // tree_type: "ordinary",
-      // mapid: { panel2valueid: 1781 },
-      // map_type: { panel2curtype: 6 },
       id: 262,
       panelnum: 2,
       treeid: 3236,
@@ -1316,6 +1201,16 @@ const showselectdemo2 = () => {
       map_type: { panel2curtype: 8 },
     };
     selectdemo2Int(params);
+  } else if (selectdemo2.value == 'tdemo9') {
+    params = {
+      id: 298,
+      panelnum: 2,
+      treeid: 3474,
+      tree_type: "ordinary",
+      mapid: { panel2valueid: 3475 },
+      map_type: { panel2curtype: 9 },
+    };
+    selectdemo2Int(params);
   } else {
     location.reload();
   }
@@ -1341,14 +1236,12 @@ const selectdemo2Int = (params) => {
     }
     panel2valueid.value = p2id;
     panel2curtype.value = p2type;
-    // setTimeout(() => {
-    //   initPage();
-    // }, 2000);
     setTimeout(() => {
       initPage();
     }, 1000);
   }
 };
+
 onMounted(() => {
   cwidth.value = panel2.value.offsetWidth;
   cheight.value = panel2.value.offsetHeight;
@@ -1375,9 +1268,6 @@ onMounted(() => {
     resetparams.mapid = p2id;
     resetparams.maptype = p2type;
     openLoading();
-    // setTimeout(() => {
-    //   initPage();
-    // }, 3000);
     setTimeout(() => {
       initPage();
     }, 1000);
@@ -1403,6 +1293,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .appmenu {
   border-bottom: 1px solid #ccc;
+
   ul,
   li {
     list-style: none;
@@ -1412,20 +1303,24 @@ onBeforeUnmount(() => {
     .active {
       border: 2px dotted #ccc;
     }
+
     .btn {
       padding: 0;
       margin: 0;
       height: 30px;
       border: 0;
+
       .el-image {
         width: 30px;
         height: 30px;
       }
     }
   }
+
   ul {
     display: flex;
     margin: 5px;
+
     li {
       cursor: pointer;
       height: 30px;
@@ -1434,20 +1329,24 @@ onBeforeUnmount(() => {
       border: 2px solid white;
     }
   }
+
   .right12 {
     display: flex;
     align-items: center;
     justify-content: end;
+
     .resetbtn {
       margin-left: 10px;
       cursor: pointer;
     }
   }
+
   .sharebtn {
     box-sizing: border-box;
     padding: 10px;
     width: 100px;
     float: right;
+
     .el-button {
       width: 100%;
       color: white;
@@ -1455,80 +1354,98 @@ onBeforeUnmount(() => {
     }
   }
 }
+
 .applicationwrap {
   min-height: calc(100vh - 114px);
   display: flex;
+
   .el-image {
     width: 30px;
     float: right;
     cursor: pointer;
   }
+
   .line {
     min-height: 36px;
     line-height: 36px;
     border-left: 4px solid #42bec3;
     padding-left: 5px;
     margin-bottom: 2px;
+
     .el-button {
       color: white;
     }
   }
+
   .pluginconfig {
     width: 95%;
     margin-left: 5%;
+
     :deep(.el-form-item) {
       font-size: 12px !important;
     }
+
     :deep(.el-form-item__label) {
       font-size: 12px !important;
     }
   }
+
   .treeindexwrap {
     :deep(.el-tabs__item) {
       width: 148.5px;
       border: 0;
     }
+
     :deep(.el-tabs__content) {
       padding: 0;
     }
   }
+
   .el-collapse-item__content {
     padding-bottom: 10px;
   }
+
   .firstline {
     display: flex;
     align-items: center;
     padding: 10px;
     border-bottom: 2px dotted #ccc;
+
     label {
       width: 20px;
       padding-right: 5px;
     }
+
     .el-select {
       width: 60%;
     }
   }
+
   .leftconfig {
     width: 300px;
     height: calc(100vh - 120px);
     border-right: 1px solid #ccc;
     overflow: auto;
   }
+
   .leftconfighide {
     width: 30px;
     height: calc(100vh - 120px);
     border-right: 1px solid #ccc;
     overflow: auto;
   }
+
   .collapsewrap {
     .slider {
       display: flex;
       align-items: center;
     }
+
     :deep(.el-slider) {
       width: 80%;
       padding-left: 5px;
     }
+
     span {
       width: 30px;
       padding-left: 10px;
@@ -1537,9 +1454,11 @@ onBeforeUnmount(() => {
       font-weight: bold;
     }
   }
+
   .toptree {
     box-sizing: border-box;
     padding: 10px 2px;
+
     .title {
       display: flex;
       align-items: center;
@@ -1550,34 +1469,41 @@ onBeforeUnmount(() => {
       span {
         flex: 1;
       }
+
       .el-image {
         cursor: pointer;
         width: 20px;
         padding-right: 10px;
       }
     }
+
     .tips {
       font-size: 12px;
       color: red;
       text-align: right;
     }
   }
+
   .bottommap {
     box-sizing: border-box;
     padding: 10px;
+
     .title {
       display: flex;
       align-items: center;
       font-size: 16px;
       font-weight: bold;
       padding-bottom: 10px;
+
       .el-image {
         width: 20px;
         padding-right: 10px;
       }
     }
+
     .tips {
       font-size: 12px;
+
       span:first-child {
         display: inline-block;
         width: 40%;
@@ -1585,12 +1511,14 @@ onBeforeUnmount(() => {
         cursor: pointer;
         border: 1px solid #ddd;
         text-align: center;
+
         .downbtn {
           background: none;
           color: black;
           border: none;
         }
       }
+
       span:last-child {
         text-align: right;
         width: 58%;
@@ -1598,45 +1526,54 @@ onBeforeUnmount(() => {
         color: red;
       }
     }
+
     .pluginsel {
       display: flex;
       padding-bottom: 5px;
+
       label {
         color: #606266;
         font-size: 14px;
         padding: 0 12px 0 0;
         width: 70px;
       }
-      .el-select {
-      }
+
+      .el-select {}
     }
   }
+
   .centertree {
     box-sizing: border-box;
     flex: 1;
     border-right: 1px solid #ccc;
     padding: 20px;
+
     #tree-gl {
       min-height: calc(100vh - 98px);
     }
   }
+
   .rightmap {
     flex: 1;
     height: calc(100vh - 58px);
+
     iframe {
       width: 100%;
       height: calc(100vh - 58px);
     }
   }
+
   .panelwrap {
     flex: 1;
     height: calc(100vh - 114px);
     width: calc(100vw - 300px);
     overflow: auto;
+
     .selectposition {
       width: 100%;
       text-align: right;
     }
+
     .tips {
       width: 100%;
       text-align: center;
@@ -1645,46 +1582,55 @@ onBeforeUnmount(() => {
       transform: translate(0, -50%);
       top: 50%;
       position: absolute;
+
       p {
         margin-top: 40px;
       }
     }
+
     .panel {
       display: flex;
       height: calc(100vh - 114px);
+
       .panel1,
       .panel2 {
         flex: 1;
       }
+
       .panel1 {
         position: relative;
+
         .panel1tree {
-          height:30px;
+          height: 30px;
           position: absolute;
           left: 50%;
           transform: translate(-50%);
         }
+
         #tree-ordinary,
         #tree-big {
           height: calc(100vh - 120px);
           box-sizing: border-box;
-          overflow-y: auto;
+          overflow-y: hidden;
         }
       }
+
       .panel2 {
-        border-left: thin solid rgb(187, 187, 187);
+        // border-left: thin solid rgb(187, 187, 187);
 
         .oIframe2 {
           height: calc(100vh - 120px);
         }
       }
     }
+
     iframe {
       width: 100%;
       height: 400px;
     }
   }
 }
+
 .bottomwrap {
   display: none;
 }

@@ -16,7 +16,7 @@
               ref="treeupload"
               action=""
               :limit="1"
-              accept=".nwk,.nxs,.phyloxml,.nex"
+              accept=".nwk,.nxs,.phyloxml,.nex,.phy,.tree"
               :max-size="maxFileSize"
               :on-exceed="handleTreeExceed"
               :on-change="handleTreeBigChange"
@@ -24,7 +24,7 @@
             >
               {{ $t("application.treefile") }}
             </el-upload>
-            <a style="color: red; width: 144px">.nwk,.nxs,.phyloxml,.nex</a>
+            <a style="color: red; width: 155px; font-size:10px;">.nwk,.nxs,.phyloxml,.nex,.phy,.tree</a>
           </div>
           <el-row>
             <el-col :span="12" style="text-indent: 2em">{{

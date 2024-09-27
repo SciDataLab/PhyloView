@@ -3,12 +3,8 @@
     <el-row>
       <el-col :span="12">
         <ul>
-          <li
-            v-for="item in panelli"
-            :key="item.num"
-            @click="curPanel(item.num)"
-            :class="{ active: curpanelnum == item.num }"
-          >
+          <li v-for="item in panelli" :key="item.num" @click="curPanel(item.num)"
+            :class="{ active: curpanelnum == item.num }">
             <el-button class="btn" :disabled="curpanelnum == item.num">
               <el-image :src="item.name"></el-image>
             </el-button>
@@ -16,37 +12,25 @@
         </ul>
       </el-col>
       <el-col :span="12" class="right12">
-        <el-select
-          style="width: 350px"
-          placeholder="Select demo"
-          v-model="selectdemo1"
-          @change="selectdemo1Change"
-          clearable
-        >
-          <el-option
-            v-for="item in selectdemoopt1"
-            :label="item.label"
-            :value="item.value"
-          ></el-option>
+        <el-select style="width: 350px" placeholder="Select demo" v-model="selectdemo1" @change="selectdemo1Change"
+          clearable>
+          <el-option v-for="item in selectdemoopt1" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <div class="resetbtn">
           <el-tooltip content="reset" placement="top" effect="light">
-            <el-button
-              type="warning"
-              @click="resetConfig"
-            >
-             {{ $t('application.reset') }}
+            <el-button type="warning" @click="resetPage">
+              {{ $t('application.reset') }}
             </el-button>
           </el-tooltip>
         </div>
         <div class="sharebtn">
           <el-button v-if="guserinfo.username" color="#42bec3" @click="openShare">{{
-              $t("application.share")
-            }}</el-button>
+        $t("application.share")
+      }}</el-button>
           <el-tooltip v-else :content="$t('application.sharetip')" placement="top" effect="light">
             <el-button color="#42bec3" @click="openShare" :disabled="true">{{
-              $t("application.share")
-            }}</el-button>
+        $t("application.share")
+      }}</el-button>
           </el-tooltip>
         </div>
       </el-col>
@@ -62,48 +46,31 @@
             <span>{{ $t("application.treetitle") }}</span>
           </div>
           <div class="treeindexwrap">
-            <el-tabs
-              type="border-card"
-              @tab-change="tabTreeChange"
-              v-model="panel1curtype"
-            >
+            <el-tabs type="border-card" @tab-change="tabTreeChange" v-model="panel1curtype">
               <el-tab-pane name="ordinary">
                 <template #label>
                   <span class="custom-tabs-label">
-                    <el-tooltip
-                      content="*Recommend for nodes < 10,000"
-                      placement="top"
-                      effect="dark"
-                    >
+                    <el-tooltip content="*Recommend for nodes < 10,000" placement="top" effect="dark">
                       <el-button link>
                         {{ $t("application.basictree") }}
                       </el-button>
                     </el-tooltip>
                   </span>
                 </template>
-                <tree-ordinary
-                  @treeOrdinaryConfigTrans="panel1getOrdinaryConfig"
-                  :treeordinaryMessage="treeordinaryMessage"
-                ></tree-ordinary>
+                <tree-ordinary @treeOrdinaryConfigTrans="panel1getOrdinaryConfig"
+                  :treeordinaryMessage="treeordinaryMessage"></tree-ordinary>
               </el-tab-pane>
               <el-tab-pane name="big">
                 <template #label>
                   <span class="custom-tabs-label">
-                    <el-tooltip
-                      content="*Recommend for nodes > 10,000"
-                      placement="top"
-                      effect="dark"
-                    >
+                    <el-tooltip content="*Recommend for nodes > 10,000" placement="top" effect="dark">
                       <el-button link>
                         {{ $t("application.bigtree") }}
                       </el-button>
                     </el-tooltip>
                   </span>
                 </template>
-                <tree-big
-                  @treeBigConfigTrans="panel1getBigConfig"
-                  :treebigMessage="treebigMessage"
-                ></tree-big>
+                <tree-big @treeBigConfigTrans="panel1getBigConfig" :treebigMessage="treebigMessage"></tree-big>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -130,70 +97,30 @@
       </div>
     </div>
     <!-- 共享 -->
-    <el-dialog
-      v-model="dialogShareFormVisible"
-      :title="$t('application.share')"
-    >
+    <el-dialog v-model="dialogShareFormVisible" :title="$t('application.share')">
       <el-form ref="shareformRef" :model="shareform" :rules="sharerules">
-        <el-form-item
-          :label="$t('application.imgs')"
-          :label-width="formLabelWidth"
-          prop="img"
-        >
-          <el-upload
-            class="upload-demo"
-            action=""
-            accept=".png,.jpg"
-            :max-size="maxFileSize"
-            :limit="1"
-            :on-change="uploadimghandleChange"
-            :auto-upload="false"
-          >
-            <el-button color="#42be43" style="color: white"
-              >Click to upload</el-button
-            >
+        <el-form-item :label="$t('application.imgs')" :label-width="formLabelWidth" prop="img">
+          <el-upload class="upload-demo" action="" accept=".png,.jpg" :max-size="maxFileSize" :limit="1"
+            :on-change="uploadimghandleChange" :auto-upload="false">
+            <el-button color="#42be43" style="color: white">Click to upload</el-button>
           </el-upload>
         </el-form-item>
-        <el-form-item
-          :label="$t('application.title')"
-          :label-width="formLabelWidth"
-          prop="title"
-        >
+        <el-form-item :label="$t('application.title')" :label-width="formLabelWidth" prop="title">
           <el-input v-model="shareform.title" autocomplete="off" />
         </el-form-item>
-        <el-form-item
-          :label="$t('application.abs')"
-          :label-width="formLabelWidth"
-          prop="des"
-        >
+        <el-form-item :label="$t('application.abs')" :label-width="formLabelWidth" prop="des">
           <el-input v-model="shareform.des" autocomplete="off" />
         </el-form-item>
-        <el-form-item
-          :label="$t('application.type')"
-          :label-width="formLabelWidth"
-          prop="type"
-        >
-          <el-select
-            v-model="shareform.type"
-            multiple
-            placeholder="Please select a type"
-          >
-            <el-option
-              v-for="item in sharetypeopts"
-              :label="item.label"
-              :value="item.value"
-            />
+        <el-form-item :label="$t('application.type')" :label-width="formLabelWidth" prop="type">
+          <el-select v-model="shareform.type" multiple placeholder="Please select a type">
+            <el-option v-for="item in sharetypeopts" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogShareFormVisible = false">Cancel</el-button>
-          <el-button
-            color="#42be43"
-            style="color: white"
-            @click="saveShare(shareformRef)"
-          >
+          <el-button color="#42be43" style="color: white" @click="saveShare(shareformRef)">
             Confirm
           </el-button>
         </span>
@@ -223,8 +150,12 @@ const route = useRoute();
 const curpanelnum = ref(1);
 const selectdemo1 = ref("odemo1");
 const shareid = ref(0);
-const fromtype  = ref(null);
+const fromtype = ref(null);
 const dialogShareFormVisible = ref(false);
+const resetparams = reactive({
+  treeid:null,
+  treetype:null
+})
 const shareform = reactive({
   img: "",
   title: "",
@@ -306,44 +237,33 @@ let treeOridinaryConfig = reactive({
 });
 const getInitOrdinaryTree = () => {
   nextTick(() => {
-    treeORDINARY = new phyloview.InitTreeStructure(
-      "#tree-ordinary",
-      treeOridinaryConfig
-    );
     if (treeOridinaryConfig.layout == "radial") {
       treeORDINARY = new phyloview.InitRadialStructure(
         "#tree-ordinary",
         treeOridinaryConfig
       );
+    }else{
+      treeORDINARY = new phyloview.InitTreeStructure(
+      "#tree-ordinary",
+      treeOridinaryConfig
+    );
     }
   });
 };
-// 重置配置
-const getjhscfg = () => {
-  let params = {
-    id:shareid.value,
-    type:'tree'
-  }
-  jhscfg(params).then((res) => {
-    if(res.cfg.code == 0){
-      if(res.content){
-        panel1getOrdinaryConfig(res.cfg);
-      }else if(res.cfg.source){
-        panel1getBigConfig(res.cfg);
-      }
-    }
-  });
+const initPage = () => {
+  initresetTree()
 }
-const resetConfig = () => {
-  getjhscfg()
+const resetPage = () => {
+  panel1curtype.value = resetparams.treetype ?? panel1curtype.value;
+  initresetTree()
 };
 // 重置树
-const resetTree = () => {
+const initresetTree = () => {
   openLoading();
   if (panel1curtype.value == "ordinary" && treeOridinaryConfig.id) {
-    getJhsCentent({ id: treeOridinaryConfig.id });
+    setTree({ id: treeOridinaryConfig.id });
   } else if (panel1curtype.value == "big" && treeBigConfig.id) {
-    getJhsCentent({ id: treeBigConfig.id });
+    setTree({ id: treeBigConfig.id });
   } else {
     ElMessage({
       message: t("application.curnotreefile"),
@@ -351,7 +271,7 @@ const resetTree = () => {
     });
   }
 };
-const getJhsCentent = (params) => {
+const setTree = (params) => {
   jhscentent(params).then((res) => {
     closeLoading();
     if (res.code == "0") {
@@ -413,11 +333,12 @@ const openShare = () => {
     });
   }
 };
+let tree_file_cfg = {};
 // 保存分享
 const saveShare = async (formEl) => {
   let treeid = "";
   let tree_cfg = {};
-  let tree_file_cfg = {};
+
   if (panel1curtype.value == "ordinary") {
     treeid = treeOridinaryConfig.id;
     tree_cfg = treeOridinaryConfig;
@@ -559,11 +480,11 @@ const panel1getBigConfig = (data) => {
 const panel1getOrdinaryConfig = (data) => {
   for (const key in data) {
     treeOridinaryConfig[key] = data[key];
-    if(key == 'tree_file_cfg'){
-      for(let i in data['tree_file_cfg']){
-        if(data['tree_file_cfg'][i]){
+    if (key == 'tree_file_cfg') {
+      for (let i in data['tree_file_cfg']) {
+        if (data['tree_file_cfg'][i]) {
           treeOridinaryConfig['tree_file_cfg'][i] = data['tree_file_cfg'][i];
-        }else{
+        } else {
           treeOridinaryConfig['tree_file_cfg'][i] = "";
         }
       }
@@ -714,11 +635,11 @@ const selectdemo1Int = (params) => {
     } else if (panel1curtype.value == "ordinary") {
       treeOridinaryConfig.id = params.treeid;
     }
-    resetTree();
+    initPage();
   }
 };
 const shareidselectValue = (value) => {
-  switch(value){
+  switch (value) {
     case '128': selectdemo1.value = "gorGor6"; break;
     case '127': selectdemo1.value = "oryCun2"; break;
     case '126': selectdemo1.value = "oviAri4"; break;
@@ -740,25 +661,30 @@ const shareidselectValue = (value) => {
     case '110': selectdemo1.value = "ce11"; break;
     case '109': selectdemo1.value = "bosTau9"; break;
     case '107': selectdemo1.value = "canFam6"; break;
-    default: selectdemo1.value = "";break;
+    default: selectdemo1.value = ""; break;
   }
 }
 onMounted(() => {
   //如果是gallery传过来的值获取
-  shareid.value = route.query.id;
-  fromtype.value = route.query.from;
-  if (shareid.value) {
-    shareidselectValue(shareid.value)
+
+  if (route.query.id) {
+    shareid.value = route.query.id;
+    fromtype.value = route.query.from;
     panel1curtype.value = route.query.tree_type;
+    shareidselectValue(shareid.value)
     curpanelnum.value = route.query.panelnum ? route.query.panelnum : 1;
     if (panel1curtype.value == "big") {
       treeBigConfig.id = route.query.treeid;
     } else if (panel1curtype.value == "ordinary") {
       treeOridinaryConfig.id = route.query.treeid;
     }
+
+    resetparams.treeid = route.query.treeid;
+    resetparams.treetype = route.query.tree_type;
+
     // 得到树数据
     setTimeout(() => {
-      resetTree();
+      initPage();
     }, 2000);
   } else {
     getInitOrdinaryTree();
@@ -772,6 +698,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .appmenu {
   border-bottom: 1px solid #ccc;
+
   ul,
   li {
     list-style: none;
@@ -782,23 +709,28 @@ onMounted(() => {
       width: 30px;
       height: 30px;
     }
+
     .active {
       border: 2px dotted #ccc;
     }
+
     .btn {
       padding: 0;
       margin: 0;
       height: 30px;
       border: 0;
+
       .el-image {
         width: 30px;
         height: 30px;
       }
     }
   }
+
   ul {
     display: flex;
     margin: 5px;
+
     li {
       cursor: pointer;
       height: 30px;
@@ -807,20 +739,24 @@ onMounted(() => {
       border: 2px solid white;
     }
   }
+
   .right12 {
     display: flex;
     align-items: center;
     justify-content: end;
+
     .resetbtn {
       margin-left: 10px;
       cursor: pointer;
     }
   }
+
   .sharebtn {
     box-sizing: border-box;
     padding: 10px;
     width: 100px;
     float: right;
+
     .el-button {
       width: 100%;
       color: white;
@@ -828,54 +764,66 @@ onMounted(() => {
     }
   }
 }
+
 .applicationwrap {
   min-height: calc(100vh - 114px);
   display: flex;
+
   .el-image {
     width: 30px;
     float: right;
     cursor: pointer;
   }
+
   .treeindexwrap {
     :deep(.el-tabs__item) {
       width: 148.5px;
       border: 0;
     }
+
     :deep(.el-tabs__content) {
       padding: 0;
     }
   }
+
   .el-collapse-item__content {
     padding-bottom: 10px;
   }
+
   .firstline {
     display: flex;
     align-items: center;
     padding: 10px;
     border-bottom: 2px dotted #ccc;
+
     label {
       width: 20px;
       padding-right: 5px;
     }
+
     .el-select {
       width: 60%;
     }
   }
+
   .leftconfig {
     width: 300px;
     height: calc(100vh - 114px);
     border-right: 1px solid #ccc;
     overflow: auto;
   }
+
   .leftconfighide {
     width: 30px;
     height: calc(100vh - 118px);
     border-right: 1px solid #ccc;
     overflow: auto;
   }
+
   .toptree {
     box-sizing: border-box;
     padding: 10px 2px;
+
     .title {
       display: flex;
       align-items: center;
@@ -886,6 +834,7 @@ onMounted(() => {
       span {
         flex: 1;
       }
+
       .el-image {
         cursor: pointer;
         width: 20px;
@@ -897,7 +846,8 @@ onMounted(() => {
   .panelwrap {
     flex: 1;
     height: calc(100vh - 118px);
-    width:calc(100vw - 300px);
+    width: calc(100vw - 300px);
+
     .tips {
       width: 100%;
       text-align: center;
@@ -907,10 +857,13 @@ onMounted(() => {
       top: 50%;
       position: relative;
     }
+
     .panel {
       width: 100%;
     }
+
     .panel1 {
+
       #tree-ordinary,
       #tree-big {
         height: calc(100vh - 118px);
@@ -920,6 +873,7 @@ onMounted(() => {
     }
   }
 }
+
 .bottomwrap {
   display: none;
 }

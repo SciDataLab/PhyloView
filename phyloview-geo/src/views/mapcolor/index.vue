@@ -91,7 +91,6 @@ const initMap = () => {
         type: "geocode",
       };
       tianditugeocoder(params).then((res) => {
-        console.log(res, "res");
         loading.value.close();
         let province_code_arr = ["710000", "810000", "820000"];
         let address = res.result.addressComponent;

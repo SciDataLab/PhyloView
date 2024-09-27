@@ -291,7 +291,6 @@ const handleMessage = (event) => {
 };
 onMounted(() => {
   window.addEventListener("message", handleMessage, false);
-
   initMap();
 });
 onBeforeUnmount(() => {

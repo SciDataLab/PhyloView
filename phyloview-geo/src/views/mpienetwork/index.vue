@@ -18,60 +18,59 @@ let linetype = "";
 let linewidth = "";
 // 初始化graph
 const initGraphChart = () => {
-  let options= {
+  let options = {
     tooltip: {},
     legend: {
-      show:legend,
-      y:"bottom",
-      x:"center",
+      show: legend,
+      y: "bottom",
+      x: "center",
       data: categories.filter(function (a) {
-        if(a.name != 'LINE'){
+        if (a.name != 'LINE') {
           return a
         }
       }),
     },
     series: [
-    {
-      type: "graph",
-      layout: "force", // 自定义布局
-      force: {
-        repulsion: 5,
-        gravity: 0.01,
-        edgeLength: [30, 50],
-        layoutAnimation: true,
-      },
-      // draggable: true,
-      zlevel: 1,
-      label: {
-        show: true,
-        position: "left",
-      },
-      labelLayout: {
-        hideOverlap: true,
-      },
-      scaleLimit: {
-        min: 0.4,
-        max: 2,
-      },
-      symbol: "circle",
-      categories: categories,
-      data: series, // 节点数据
-      links: links,
-      lineStyle: {
-        color: "source",
-        curveness: linecurveness,
-        type:linetype,
-        width:linewidth,
-      },
-
-      emphasis: {
-        focus: "adjacency",
+      {
+        type: "graph",
+        layout: "force", // 自定义布局
+        force: {
+          repulsion: 5,
+          gravity: 0.01,
+          edgeLength: [30, 50],
+          layoutAnimation: true,
+        },
+        // draggable: true,
+        zlevel: 1,
+        label: {
+          show: true,
+          position: "left",
+        },
+        labelLayout: {
+          hideOverlap: true,
+        },
+        scaleLimit: {
+          min: 0.4,
+          max: 2,
+        },
+        symbol: "circle",
+        categories: categories,
+        data: series, // 节点数据
+        links: links,
         lineStyle: {
-          width: 5,
+          color: "source",
+          curveness: linecurveness,
+          type: linetype,
+          width: linewidth,
+        },
+        emphasis: {
+          focus: "adjacency",
+          lineStyle: {
+            width: 5,
+          },
         },
       },
-    },
-  ],
+    ],
   };
   var chartDom = document.getElementById("pienetworkecharts");
   myChart.value = echarts.init(chartDom);
@@ -79,7 +78,7 @@ const initGraphChart = () => {
 };
 
 function getPieSeries(pieData, num) {
-  console.log(pieData,'pieData')
+  console.log(pieData, 'pieData')
   return pieData.map(function (item, index) {
     return {
       // 以下内容均可以根据自己的需求进行改变
@@ -89,7 +88,7 @@ function getPieSeries(pieData, num) {
       type: "pie",
       label: { show: false },
       center: [item.x, item.y],
-      radius: item.symbolSize/2,
+      radius: item.symbolSize / 2,
       data: item.data,
     };
   });
@@ -140,8 +139,8 @@ const setColorNodes = (curitem) => {
   };
 };
 const handleMessage = (event) => {
-  console.log(myChart.value,'myChart.value')
-  if(myChart.value){
+  console.log(myChart.value, 'myChart.value')
+  if (myChart.value) {
     myChart.value.clear();
   }
   let content = event.data.content;
@@ -164,6 +163,6 @@ onMounted(() => {
 <style scoped>
 #pienetworkecharts {
   height: 98vh;
-  width:98%;
+  width: 98%;
 }
 </style>

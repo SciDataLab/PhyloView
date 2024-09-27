@@ -1,6 +1,4 @@
 import {reactive} from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
-
 import panel5 from "@/assets/application/panel5.png";
 import panel4 from "@/assets/application/panel4.png";
 import panel3 from "@/assets/application/panel3.png";
@@ -14,17 +12,21 @@ import pienetworkimg from "@/assets/plugins/pienetwork.png";
 import freqstackimg from "@/assets/plugins/freqstack.png";
 import groupbarimg from "@/assets/plugins/groupbar.png";
 import acmapimg from "@/assets/plugins/acmap.png";
+import heatmapimg from "@/assets/plugins/heatmap.png";
+
 import pdbeimg from "@/assets/plugins/pdbe.png";
 
 // export const docUrl = "http://10.0.90.58:5175/";
-// export const geoUrl = "http://localhost:5176/geo/";
+// export const geoUrl = "http://localhost:5173/geo/";
 // export const webUrl = "http://10.0.90.58:5173/";
-export const webUrl = "http://darwintree.cn/PhyloView/";
+
 export const docUrl = "http://darwintree.cn/files/";
 export const geoUrl = 'http://darwintree.cn/geo/';
+export const webUrl = "http://darwintree.cn/PhyloView/";
+
+
 export const maxFileSize = 104857600; //1024*1024*100
 export const selectdemoopt1 = [{
-  // label:'Tarsius_syrichta',
   label:'Demo: a demo of  PhyloView annotations',
   value:'odemo1'
 },{
@@ -96,59 +98,52 @@ export const selectdemoopt1 = [{
 }]
 export const selectdemoopt2 = [
   {
-    // label:'vascular plant',
     label:'A subtree of the Chinease vascular tree, showing the distribution of plant species',
     value:'tdemo1'
   },
   {
-    // label:'WNV_demo',
     label:'WNV_demo: a subtree of WNV transmission on map',
     value:'tdemo2'
   },
   {
-    // label:'Region_demo',
     label:'Region_demo: a tree demo to visualise the sampling areas, different colour related to the different groups',
     value:'tdemo3'
   },
   {
-    // label:'WNV_net_demo',
     label:'WNV_network_demo: a subtree of WNV transmission in a network view',
     value:'tdemo4'
   },
   {
-    // label:'Time_demo',
     label:'Time_demo: frequency of strain with time',
     value:'tdemo5'
   },
   {
-    // label:'Count_demo',
     label:'Count_demo: tree with number of in and out in a region',
     value:'tdemo6'
   },
   {
-    // label:'Acmap',
     label:'An ACmap of influenza',
     value:'tdemo7'
   },
-{
-  // label:'PDB',
-  label:'PDB: a tree of cyp51 fungi',
-  value:'tdemo8'
-}
+  {
+    label:'Ruegeria taxonomy',
+    value:'tdemo9'
+  },
+  {
+    label:'PDB: a tree of cyp51 fungi',
+    value:'tdemo8'
+  }
 ]
 export const selectdemoopt3 = [{
-  // label:'Demo_3panels',
   label:'Demo_3panels: a demo for 3 panels with tree, transmission and stack plot',
   value:'moredemo1',
   num:3
 },
 {
-  // label:'Demo_4panels',
   label:'Demo_4panels: a demo for 4 panels with tree, acmap, bar plot and stack plot',
   value:'moredemo2',
   num:4,
 },{
-  // label:'Demo_5panels',
   label:'Demo_5panels: a demo for 5 panels with tree,  transmission, acmap, bar plot and stack plot',
   value:'moredemo3',
   num:5,
@@ -199,6 +194,10 @@ export const apptypeopts = [
   {
     label: "Pdb",
     value: 8,
+  },
+  {
+    label: "Heatmap",
+    value: 9,
   },
 ];
 export const gallerytypeopts = [
@@ -273,9 +272,8 @@ export const plugintypevalue = {
   6: "groupbar",
   7: "acmap",
   8: "pdb",
+  9: "heatmap",
 };
-
-
 export const pluginlistzh  = [
 {
   id: "mapcolor",
@@ -295,7 +293,6 @@ export const pluginlistzh  = [
   show:true,
   template:'tdemo2',
 },
-
 {
   id: "mapdensity",
   img: mapregionimg,
@@ -342,6 +339,15 @@ export const pluginlistzh  = [
   template:'tdemo7',
 },
 {
+  id: "headmap",
+  img: heatmapimg,
+  title: "Heatmap",
+  abs: "用于成对AAI可视化等。当插件热图中的网格被选中时，对应进化树的叶节点会进行高亮显示；如果选中进化树中的一个类群，热图中的对应部分会单独展示。",
+  key: "Diagram",
+  show:true,
+  template:'tdemo9',
+},
+{
   id: "pdb",
   img: pdbeimg,
   title: "PDBe",
@@ -370,7 +376,6 @@ export const pluginlisten = [
     show:true,
     template:'tdemo2',
   },
-  
   {
     id: "mapdensity",
     img: mapregionimg,
@@ -417,6 +422,15 @@ export const pluginlisten = [
     template:'tdemo7',
   },
   {
+    id: "headmap",
+    img: heatmapimg,
+    title: "Heatmap",
+    abs: "A visualization of the pairwise average amino acid identity. When a grid cell in the heatmap of average amino acid identity is selected, the corresponding tree tips are highlighted. If a clade is selected, the relevant section of the heatmap is displayed for the pairwise average amino acid identities.",
+    key: "Diagram",
+    show:true,
+    template:'tdemo9',
+  },
+  {
     id: "pdb",
     img: pdbeimg,
     title: "PDBe",
@@ -426,9 +440,8 @@ export const pluginlisten = [
     template:'tdemo8',
   },
   ];
-
-
-export const maptypeopts = [{
+export const maptypeopts = [
+{
   id:'application.heavenandearthsatellite',
   value:'http://t{0-7}.tianditu.com/DataServer?T=img_w&x={x}&y={y}&l={z}&tk=7786923a385369346d56b966bb6ad62f'
 },
@@ -495,8 +508,6 @@ export const collectChildrenNames = (obj) => {
   return names;
 };
 
-
-
 // 中英文提示
 export const  zhuploaddatashow= "*请上传数据后，选择需要展示的插件"
 export const  enuploaddatashow= "*Please upload the plugin data and then select the plugin."
@@ -507,14 +518,12 @@ EEKplI/sPYNYLNtDtcUm2IuqhEyAtogbviTEWP9z4cO6nXWB6w9nKcLI3FU0nGMS
 wpp0nZF9+Y1zz3gtarbJ1MYb7LQ4qLDQ0Rzd1KkrAUlVk33nHJVVAgMBAAE=
 -----END RSA PUBLIC KEY-----`;
 import { JSEncrypt } from "jsencrypt";
-
 export const rsapassword = (data) => {
   const encrypt = new JSEncrypt();
   encrypt.setPublicKey(pubKey);
   let rsavalue = encrypt.encrypt(data);
   return rsavalue;
 };
-
 export const readFile = (filePath) => {
   // 创建一个新的xhr对象
   let xhr = null,
@@ -541,8 +550,6 @@ export const readFileFirstLine = (filePath) => {
     ? xhr.responseText.slice(0, xhr.responseText.indexOf("\n"))
     : null;
 };
-
-
 // 共享校验
 export const sharerules = reactive({
   img: [

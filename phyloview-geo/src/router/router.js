@@ -5,17 +5,8 @@ import {
 } from 'vue-router'
 const routes = [{
     path: '/',
-    redirect: '/mapcolor',
+    redirect: '/nodata',
     children:[
-      {
-        path: 'mapcolor',
-        name: 'mapcolor',
-        component: () => import('@/views/mapcolor/index.vue'),
-        meta: {
-          title: 'MapColor',
-          jumpPath: '/mapcolor'
-        }
-      },
       {
         path: 'nodata',
         name: 'nodata',
@@ -68,6 +59,15 @@ const routes = [{
         meta: {
           title: 'FreqStack',
           jumpPath: '/freqstack'
+        }
+      },
+      {
+        path: 'heatmap',
+        name: 'heatmap',
+        component: () => import('@/views/mheatmap/index.vue'),
+        meta: {
+          title: 'Heatmap',
+          jumpPath: '/heatmap'
         }
       },
       {

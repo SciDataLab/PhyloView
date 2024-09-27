@@ -282,7 +282,7 @@ onMounted(() => {
     .wright {
       cursor: pointer;
       justify-content: end;
-      width: 200px;
+      width: 300px;
       display: flex;
       align-items: center;
 
@@ -298,7 +298,7 @@ onMounted(() => {
 
       .accountswrap {
         padding-left: 20px;
-        width: 125px;
+        // width: 125px;
         background: none;
         height: 18px;
 

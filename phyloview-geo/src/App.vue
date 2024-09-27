@@ -1,15 +1,20 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: chenyan
+ * @Date: 2022-07-26 10:43:58
+ * @LastEditors: chenyan
+ * @LastEditTime: 2023-04-10 13:55:57
+-->
 <template>
   <div v-cloak id="app">
     <router-view></router-view>
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
-import router from "@/router/router";
-import { useStore } from "@/store/index";
-const store = useStore();
-let getvalue = ref(null);
+import { onMounted } from "vue";
 onMounted(() => {
+
 });
 </script>
 
